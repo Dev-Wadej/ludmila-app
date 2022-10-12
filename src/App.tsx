@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import {Route,Routes,BrowserRouter as Router} from 'react-router-dom'
+import styled from 'styled-components'
+import Welcome from './pages/Welcome/Welcome'
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <AppWrapper>
+      <Router>
+        <Routes>
+          <Route path='/' element={<Welcome/>}></Route>
+        </Routes>
+      </Router>
+      
+    </AppWrapper>
+  )
 }
 
-export default App;
+export default App
+
+const AppWrapper=styled.main`
+height:100vh;
+display:grid;
+place-content: center;
+background-color:#F5F5F5;
+`
