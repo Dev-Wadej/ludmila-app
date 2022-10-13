@@ -1,17 +1,33 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { JsxElement } from 'typescript'
 import ArrowRight from '../../assets/svgs/Arrowright.svg'
+import { useLocalStorage } from '../../hooks/useLocalStorage'
+import {AppDispatch } from '../../store/store'
+import {getUser} from '../../features/Chatslice/chatslice'
+
+
+
+
 
 const Welcome:React.FC = ():JSX.Element => {
 
-const [name,setName]= React.useState<string>('')
+const dispatch = useDispatch<AppDispatch>()
 
-console.log(name)
+const [name,setName]= React.useState<string>('')
+const navigate=useNavigate()
+
 
 const handleNameChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
     const nameInput = e.target.value
     setName(nameInput)
+}
+
+const handleSubmit=()=>{
+    dispatch(getUser(name))
+    navigate('/chat')
 }
 
   return (
@@ -21,7 +37,7 @@ const handleNameChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
           <input type="text" placeholder='Enter Name' onChange={handleNameChange} value={name}/>
       </div>
       <div>
-          <button type='submit'>Submit
+          <button type='submit' disabled={name ? false : true} onClick={handleSubmit}>Submit 
           <img src={ArrowRight} alt='Arrow Right Icon'/>
           </button>
       </div>
@@ -29,7 +45,7 @@ const handleNameChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
   )
 }
 
-export default Welcome
+export default Welcome;
 
 const WelcomeWrapper=  styled.form`
 background-color:#fff;
@@ -51,6 +67,7 @@ div{
         &::placeholder{
             opacity: .7;
         }
+       
     }
     button{
         display: flex;
@@ -64,6 +81,9 @@ div{
         cursor: pointer;
         svg{
             display: inline-block;
+        }
+        &:disabled{
+            background:#D9D9D9;
         }
     }
 }
