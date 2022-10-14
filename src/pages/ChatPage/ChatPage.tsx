@@ -9,7 +9,8 @@ import { useLocalStorage } from '../../hooks/useLocalStorage'
 import {getUserSelector} from '../../features/Chatslice/chatslice'
 import {useSelector} from 'react-redux'
 
-//josshishdasjd
+//josshish
+const josh=0;
 const ChatPage = () => {
 const user = useSelector(getUserSelector)
 const [messages,setMessages]=React.useState<string>('')
