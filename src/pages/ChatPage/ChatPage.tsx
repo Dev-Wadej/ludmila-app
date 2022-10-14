@@ -1,17 +1,26 @@
 import React from 'react'
+
+//===============external dependencies=======================//
 import styled from 'styled-components'
+import {useSelector} from 'react-redux'
+
+//===============components===========================//
 import Navbar from '../../component/Navbar/Navbar'
 import UserImg from '../../assets/image/user.jpg'
 import SenderChat from '../../component/Chat/Sender'
 import ReceiverChat from '../../component/Chat/Receiver'
+//====================svg's /Icons=======================================//
 import {ReactComponent as SendBtn} from '../../assets/svgs/sendbtn.svg'
+
+
+//=====================custom hooks=================================//
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import {getUserSelector} from '../../features/Chatslice/chatslice'
-import {useSelector} from 'react-redux'
 
-//josshish
-const josh=0;
+
 const ChatPage = () => {
+
+  
 const user = useSelector(getUserSelector)
 const [messages,setMessages]=React.useState<string>('')
 const [donewithLocalStorage,setDonewithlocalstorage]=React.useState(false)
@@ -40,7 +49,6 @@ React.useEffect(()=>{
   setDonewithlocalstorage(false)
 
 },[user,donewithLocalStorage])
-
 
   return (
     <ChatPageWrapper>
