@@ -13,39 +13,32 @@ import {useSelector} from 'react-redux'
 const ChatPage = () => {
 const user = useSelector(getUserSelector)
 const [messages,setMessages]=React.useState<string>('')
-const [receiverMessage,setReceiverMessage]=React.useState<string[]>([])
+const [donewithLocalStorage,setDonewithlocalstorage]=React.useState(false)
+
+const{state,setState}=useLocalStorage(user,'')
+console.log(state)
+
+const{state:toLocalStorage,setState:setToLocalStorage}=useLocalStorage('messages',[])
 
 
-const{state,setState}=useLocalStorage(user,[])
-console.log(receiverMessage)
-
+const received = JSON.parse(localStorage.getItem('messages')!)
+console.log(received)
 
 const handleMessageInput =(e:React.ChangeEvent<HTMLInputElement>)=>{
   setMessages(e.target.value)
 }
 const handleSendMessage=()=>{
-  setState([...state,messages])
-  setMessages('')
-}
+  setState(messages)
+  setDonewithlocalstorage(true)
+  setToLocalStorage([...received,{name:user,message:messages}])
 
-React.useEffect(()=>{
-  const receiver = ()=>{
-    const person1 = localStorage.key(0)
-    const person2 = localStorage.key(1)
   
-    if(person1===user){
-      return person2
-    }
-    else {
-      return person1
-    }
-  }
- setReceiverMessage(JSON.parse(localStorage.getItem(receiver()!)!))
+}
+React.useEffect(()=>{
+  setMessages('')
+  setDonewithlocalstorage(false)
 
- receiver()
-},[user,messages])
-
-
+},[user,donewithLocalStorage])
 
 
   return (
@@ -56,14 +49,14 @@ React.useEffect(()=>{
         <h3>{user}</h3>
       </ChatPageTopBar>
 
-      {state.map((message:string,idx:number)=>(
-        <ChatToRight key={idx}> <SenderChat message={message}/> </ChatToRight>
-      ))}
 
-      {receiverMessage?.map((messages:string,idx:number)=>(
+        { toLocalStorage.map((item:{name:string|null;message:string|null},idx:number)=>(
+          <div key={idx}>
+            {item.name === user ? <ChatContainerRight><SenderChat  message={item.message!}/> </ChatContainerRight>: 
+            <ChatContainerLeft><ReceiverChat  messages={item.message!}/> </ChatContainerLeft>}
+          </div>
+        )) 
 
-        <ChatToLeft key={idx}> <ReceiverChat messages={messages} /> </ChatToLeft>
-        ))
         }
       <MessageContainer>
         <input type="text" placeholder='Message...' onChange={handleMessageInput} value={messages}/>
@@ -91,14 +84,15 @@ text-align: center;
     font-size:.9rem;
   }
 `
-const ChatToRight=styled.div`
+const ChatContainerRight=styled.div`
 display:flex;
-justify-content: right;
+justify-content:right;
 `
-const ChatToLeft=styled.div`
+const ChatContainerLeft=styled.div`
 display:flex;
-justify-content: left;
+justify-content:left;
 `
+
 
 const MessageContainer=styled.div`
 
